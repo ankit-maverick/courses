@@ -38,7 +38,7 @@ def edit_dist(s1, s2):
             if s1[i] == s2[j]:
                 cost = 0
             else:
-                cost = 1
+                cost = 2
             d[(i,j)] = min(
                            d[(i-1,j)] + 1, # deletion
                            d[(i,j-1)] + 1, # insertion
