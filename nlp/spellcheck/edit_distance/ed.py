@@ -1,7 +1,20 @@
+import re, collections
+
+
 f = open('words.txt')
 lines = f.readlines()
 f.close()
 
+
+def words(text): return re.findall('[a-z]+', text.lower()) 
+def train(features):
+    model = collections.defaultdict(lambda: 1)
+    for f in features:
+        model[f] += 1
+    return model
+
+# Get big.txt from Norvig's spell checker webpage
+NWORDS = train(words(file('/home/ankit/Downloads/big.txt').read()))
 # Line format in words.txt :
 # wrong_word;correct_word1,correct_word2\n
 
@@ -50,7 +63,7 @@ def edit_dist(s1, s2):
     return d[lenstr1-1,lenstr2-1]
 
 
-def correct_the_wrong(w, c_list):
+def correct_the_wrong(w):
 
     min_ed = 1000
 
@@ -62,7 +75,17 @@ def correct_the_wrong(w, c_list):
             predicted_c.append(c)
         elif current_ed == min_ed:
             predicted_c.append(c)
-    return predicted_c
+    if len(predicted_c) == 1:
+        return predicted_c[0]
+    else:
+        max_prior = 0
+        best_c = 'dummy'
+        for i in predicted_c:
+            if NWORDS[i] > max_prior:
+                max_prior = NWORDS[i]
+                best_c = i
+    print predicted_c
+    return "The best prediction is " + best_c
 
 # print correct_the_wrong(w_list, c_list)
 
